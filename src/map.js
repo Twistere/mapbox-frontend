@@ -7,10 +7,10 @@
     const ArrayLength = object.features[0].geometry.coordinates[0][0].length
     for(let j = 0; j < ArrayLength; j++)
         for(let i = 0; i < ArrayLength; i++){
-            let k = object.features[0].geometry.coordinates[0][0][j]
-            console.log(k)
-
+            let k = object.features[0].geometry.coordinates[0][j][i]
+            
         }
+
 }
 
 

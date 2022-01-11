@@ -1,76 +1,62 @@
 import mapboxgl from 'mapbox-gl';
-import {getJson} from './map'
+import { getJson } from './map'
 
 mapboxgl.accessToken = process.env.TOKEN_MAP
 
 const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v11',
-    center: [6.58, 46.36],
-    zoom: 9
-});
+    center: [5.85, 46.53],
+
+    zoom: 13
+
+
+})
+
+const marker = new mapboxgl.Marker({
+    color: "#fda"
+}).setLngLat([5.8503, 46.5308])
+    .addTo(map)
+
+const marker1 = new mapboxgl.Marker({
+    color: "#fda"
+}).setLngLat([5.8496, 46.5308])
+    .addTo(map)
+
+const marker2 = new mapboxgl.Marker({
+    color: "#fda"
+}).setLngLat([5.8496, 46.5291])
+    .addTo(map)
+
+const marker3 = new mapboxgl.Marker({
+    color: "#fda"
+}).setLngLat([5.8503, 46.5291])
+    .addTo(map)
+
+const marker4 = new mapboxgl.Marker({
+    color: "#fda"
+}).setLngLat([5.85, 46.53])
+    .addTo(map)
+
 
 
 map.on('load', () => {
-    map.addSource('route', {
-        'type': 'geojson',
-        'data': {
-            'type': 'Feature',
-            'properties': {},
-            'geometry': {
-                'type': 'LineString',
-                'coordinates': [
-                    [-122.483696, 37.833818],
-                    [-122.483482, 37.833174],
-                    [-122.483396, 37.8327],
-                    [-122.483568, 37.832056],
-                    [-122.48404, 37.831141],
-                    [-122.48404, 37.830497],
-                    [-122.483482, 37.82992],
-                    [-122.483568, 37.829548],
-                    [-122.48507, 37.829446],
-                    [-122.4861, 37.828802],
-                    [-122.486958, 37.82931],
-                    [-122.487001, 37.830802],
-                    [-122.487516, 37.831683],
-                    [-122.488031, 37.832158],
-                    [-122.488889, 37.832971],
-                    [-122.489876, 37.832632],
-                    [-122.490434, 37.832937],
-                    [-122.49125, 37.832429],
-                    [-122.491636, 37.832564],
-                    [-122.492237, 37.833378],
-                    [-122.493782, 37.833683]
-                ]
-            }
-        }
+    map.addSource('radar', {
+        'type': 'image',
+        'url': 'https://i.postimg.cc/L5wD7hxj/DJI-0692.jpg',
+        'coordinates': [
+            [5.8503, 46.5308],
+            [5.8496, 46.5308],
+            [5.8496, 46.5291],
+            [5.8503, 46.5291],
+        ]
     });
     map.addLayer({
-        'id': 'route',
-        'type': 'line',
-        'source': 'route',
-        'layout': {
-            'line-join': 'round',
-            'line-cap': 'round'
-        },
-        'paint': {
-            'line-color': '#888',
-            'line-width': 8
-        }
-    });
-});
-
-map.on('load', () => {
-    map.addSource('larringes', {
+        id: 'radar-layer',
         'type': 'raster',
-        'url': 'mapbox://examples.32xkp0wd'
-    });
-
-    map.addLayer({
-        'id': 'larringes',
-        'source': 'larringes',
-        'type': 'raster'
+        'source': 'radar',
+        'paint': {
+            'raster-fade-duration': 0
+        }
     });
 });
-
-getJson('https://apicarto.ign.fr/api/cadastre/commune?code_insee=74146')
