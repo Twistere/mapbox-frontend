@@ -1,5 +1,5 @@
 import mapboxgl from 'mapbox-gl';
-import { getJson } from './map'
+import Coordinates from './coordinates';
 
 mapboxgl.accessToken = process.env.TOKEN_MAP
 
@@ -13,43 +13,15 @@ const map = new mapboxgl.Map({
 
 })
 
-const marker = new mapboxgl.Marker({
-    color: "#fda"
-}).setLngLat([5.8503, 46.5308])
-    .addTo(map)
-
-const marker1 = new mapboxgl.Marker({
-    color: "#fda"
-}).setLngLat([5.8496, 46.5308])
-    .addTo(map)
-
-const marker2 = new mapboxgl.Marker({
-    color: "#fda"
-}).setLngLat([5.8496, 46.5291])
-    .addTo(map)
-
-const marker3 = new mapboxgl.Marker({
-    color: "#fda"
-}).setLngLat([5.8503, 46.5291])
-    .addTo(map)
-
-const marker4 = new mapboxgl.Marker({
-    color: "#fda"
-}).setLngLat([5.85, 46.53])
-    .addTo(map)
-
-
+let c1 = new Coordinates(99.8, [5.85, 46.53])
+let arrayCor = c1.calculateCoordinatesCorner(c1.altitude, c1.coordinates)
+console.log(arrayCor)
 
 map.on('load', () => {
     map.addSource('radar', {
         'type': 'image',
         'url': 'https://i.postimg.cc/L5wD7hxj/DJI-0692.jpg',
-        'coordinates': [
-            [5.8503, 46.5308],
-            [5.8496, 46.5308],
-            [5.8496, 46.5291],
-            [5.8503, 46.5291],
-        ]
+        'coordinates' : arrayCor
     });
     map.addLayer({
         id: 'radar-layer',
