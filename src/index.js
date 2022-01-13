@@ -13,8 +13,8 @@ const map = new mapboxgl.Map({
 
 })
 
-let c1 = new Coordinates(99.8, [5.85, 46.53])
-let arrayCor = c1.calculateCoordinatesCorner(c1.altitude, c1.coordinates)
+let c1 = new Coordinates(99.8, [5.85, 46.53], 50)
+let arrayCor = c1.calculateCoordinatesCorner(c1.altitude, c1.coordinates, c1.rotation)
 console.log(arrayCor)
 
 map.on('load', () => {
