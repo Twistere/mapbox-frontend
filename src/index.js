@@ -1,51 +1,54 @@
-import mapboxgl from 'mapbox-gl';
-import Coordinates from './coordinates';
-import getJson from './map'
+import mapboxgl from 'mapbox-gl'
+import Coordinates from './coordinates.js'
+import getJson from './map.js'
 
 mapboxgl.accessToken = process.env.TOKEN_MAP
 
 const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v11',
-    center: [5.85, 46.53],
-
-    zoom: 13
-
+    center: [5.851752, 46.542342],
+    zoom: 13,
 
 })
 
+const marker = new mapboxgl.Marker({
+    color: "#fda"
+}).setLngLat([5.8517520041548465, 46.5423420082822])
+    .addTo(map)
 
-let c1 = new Coordinates(100, [5.851752, 46.542342], 0)
-let arrayCor = c1.calculateCoordinatesCorner(c1.altitude, c1.coordinates, c1.rotation)
-console.log(arrayCor)
-let c2 = new Coordinates(100, [5.852, 46.53], 90)
-let arrayCor1 = c2.calculateCoordinatesCorner(c2.altitude, c2.coordinates, c2.rotation)
-let c3 = new Coordinates(100, [5.851, 46.531], 120)
-let arrayCor2 = c3.calculateCoordinatesCorner(c3.altitude, c3.coordinates, c3.rotation)
+const marker1 = new mapboxgl.Marker({
+    color: "#fda"
+}).setLngLat([5.851752008276578, 46.54234199589907])
+    .addTo(map)
 
+
+const marker2 = new mapboxgl.Marker({
+    color: "#fda"
+}).setLngLat([5.85175199584519,46.5423419917178])
+    .addTo(map)
+
+
+const marker3 = new mapboxgl.Marker({
+    color: "#fda"
+}).setLngLat([5.851751991723445, 46.54234200410092])
+    .addTo(map)
+
+
+
+
+
+let c2 = new Coordinates(99.80, [5.8517520041548465, 46.54234199589907], 108.50)
+let CornerCoordinates = c2.calculateCoordinatesCorner(c2.altitude, c2.coordinates, c2.rotation)
 
 map.on('load', () => {
-    map.addSource('radar', {
-        'type': 'image',
-        'url': 'https://i.postimg.cc/L5wD7hxj/DJI-0692.jpg',
-        'coordinates': arrayCor
-
-
-    });
-    map.addLayer({
-        id: 'radar-layer',
-        'type': 'raster',
-        'source': 'radar',
-        'paint': {
-            'raster-fade-duration': 0,
-            'raster-opacity': 0.5,
-        }
-    });
 
     map.addSource('radar1', {
         'type': 'image',
-        'url': 'https://i.ibb.co/hKtg3F4/default.jpg',
-        'coordinates': arrayCor1
+        'url': 'https://i.ibb.co/djNk9Kw/default.jpg',
+        'coordinates': CornerCoordinates
+
+
     });
     map.addLayer({
         id: 'radar-layer1',
@@ -54,22 +57,9 @@ map.on('load', () => {
         'paint': {
             'raster-fade-duration': 0,
             'raster-opacity': 0.5
-        }
-    });
 
-    map.addSource('radar2', {
-        'type': 'image',
-        'url': 'https://i.ibb.co/hKtg3F4/default.jpg',
-        'coordinates': arrayCor2
-    });
-    map.addLayer({
-        id: 'radar-layer2',
-        'type': 'raster',
-        'source': 'radar2',
-        'paint': {
-            'raster-fade-duration': 0,
-            'raster-opacity': 0.5
         }
+
     });
 
     map.addSource('maine', {
