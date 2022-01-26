@@ -2,7 +2,7 @@
     Le lien du stackoverflow pour comprendre le principe de fonctionnement ->
     https://stackoverflow.com/questions/43891269/rotated-points-in-mapbox-are-skewed
 */
-import * as turf  from '@turf/turf'
+import * as turf from '@turf/turf'
 export default class Coordinates {
 
     constructor(altitude, coordinates, rotation) {
@@ -20,28 +20,28 @@ export default class Coordinates {
 
         // Caractéristique de la caméra du drone.
         const Ray = 6378137
-        const Kilometers = (Math.PI * Ray) / 180
+        const Kilometers = (2 * Math.PI * Ray) / 360
         const radius = 78
 
         // Calcul en mètre terreste de la demi longueur et de la demi hauteur.
-        const distanceBetwenCenterLat = altitude * Math.tan((radius / 2) * Math.PI / 180)  
-        const distanceBetwenCenterLong = altitude * Math.tan((radius / 2) * Math.PI / 180) 
+        const distanceBetwenCenterLat = altitude * Math.tan((radius / 2) * Math.PI / 180) 
+        const distanceBetwenCenterLong = altitude * Math.tan((radius / 4) * Math.PI / 180)
 
         // Calcul des des coordonnées gps en degrés des 4 coints de l'image.
-        let latUp = coordinates[0] + (distanceBetwenCenterLat / Kilometers)
+        let latUp = coordinates[0] + (distanceBetwenCenterLat / (Kilometers * Math.cos(coordinates[0])))
 
-        let latDown = coordinates[0] - (distanceBetwenCenterLat / Kilometers)
+        let latDown = coordinates[0] - (distanceBetwenCenterLat / (Kilometers * Math.cos(coordinates[0])))
 
-        let longUp = coordinates[1] + (distanceBetwenCenterLong / (Kilometers * Math.cos(coordinates[0])))
+        let longUp = coordinates[1] + (distanceBetwenCenterLong / Kilometers)
 
-        let longDown = coordinates[1] - (distanceBetwenCenterLong / (Kilometers * Math.cos(coordinates[0])))
+        let longDown = coordinates[1] - (distanceBetwenCenterLong / Kilometers)
 
         let midCoordinates = [
-
             [latUp, longDown],
             [latUp, longUp],
             [latDown, longUp],
             [latDown, longDown]
+
         ]
         console.log(midCoordinates)
 
@@ -50,7 +50,7 @@ export default class Coordinates {
         const rotatedPolygon = turf.transformRotate(bboxPolygon, rotation)
 
         const rotatedCoords = (turf.getCoords(rotatedPolygon))[0].slice(0, 4);
-        
+
         return rotatedCoords
 
     }
