@@ -7,45 +7,26 @@ mapboxgl.accessToken = process.env.TOKEN_MAP
 const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v11',
-    center: [5.851752, 46.542342],
+    center: [5.547961, 46.670920],
     zoom: 13,
 
 })
 
 const marker = new mapboxgl.Marker({
     color: "#fda"
-}).setLngLat([5.8517520041548465, 46.5423420082822])
-    .addTo(map)
-
-const marker1 = new mapboxgl.Marker({
-    color: "#fda"
-}).setLngLat([5.851752008276578, 46.54234199589907])
-    .addTo(map)
-
-
-const marker2 = new mapboxgl.Marker({
-    color: "#fda"
-}).setLngLat([5.85175199584519,46.5423419917178])
-    .addTo(map)
-
-
-const marker3 = new mapboxgl.Marker({
-    color: "#fda"
-}).setLngLat([5.851751991723445, 46.54234200410092])
+}).setLngLat([5.851211, 46.542512])
     .addTo(map)
 
 
 
-
-
-let c2 = new Coordinates(99.80, [5.8517520041548465, 46.54234199589907], 108.50)
+let c2 = new Coordinates(99.50, [5.851211, 46.542512], 103.90)
 let CornerCoordinates = c2.calculateCoordinatesCorner(c2.altitude, c2.coordinates, c2.rotation)
 
 map.on('load', () => {
 
     map.addSource('radar1', {
         'type': 'image',
-        'url': 'https://i.ibb.co/djNk9Kw/default.jpg',
+        'url': 'https://i.ibb.co/Hr3w8D3/default.jpg',
         'coordinates': CornerCoordinates
 
 
@@ -56,7 +37,7 @@ map.on('load', () => {
         'source': 'radar1',
         'paint': {
             'raster-fade-duration': 0,
-            'raster-opacity': 0.5
+            'raster-opacity' : 0.5
 
         }
 
