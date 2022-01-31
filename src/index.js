@@ -1,5 +1,6 @@
-import mapboxgl from 'mapbox-gl'
+import mapboxgl, { PositionOptions } from 'mapbox-gl'
 import Coordinates from './coordinates.js'
+import getInseeCode from './map.js'
 import getJson from './map.js'
 
 mapboxgl.accessToken = process.env.TOKEN_MAP
@@ -37,15 +38,22 @@ map.on('load', () => {
         'source': 'radar1',
         'paint': {
             'raster-fade-duration': 0,
-            'raster-opacity' : 0.5
+            'raster-opacity': 0.5
 
         }
 
     });
 
+});
+
+document.getElementById('fit').addEventListener('click', async () => {
+    let code = prompt('Quel est le nom de votre commune ?')
+    let postalCode = await getInseeCode(code)
+    console.log(postalCode)
+    let url = `https://apicarto.ign.fr/api/cadastre/commune?code_insee=${postalCode[0].code}`
     map.addSource('maine', {
         'type': 'geojson',
-        'data': 'https://apicarto.ign.fr/api/cadastre/commune?code_insee=39442'
+        'data': url
 
     });
 
@@ -71,4 +79,4 @@ map.on('load', () => {
             'line-width': 3
         }
     });
-});
+})
