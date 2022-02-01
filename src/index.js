@@ -1,7 +1,6 @@
-import mapboxgl, { PositionOptions } from 'mapbox-gl'
-import Coordinates from './coordinates.js'
-import getInseeCode from './map.js'
-import getJson from './map.js'
+import mapboxgl from 'mapbox-gl'
+import Coordinates from './coordinates'
+import getInseeCode from './map'
 
 mapboxgl.accessToken = process.env.TOKEN_MAP
 
@@ -10,24 +9,25 @@ const map = new mapboxgl.Map({
     style: 'mapbox://styles/mapbox/streets-v11',
     center: [5.547961, 46.670920],
     zoom: 13,
+    
 
 })
 
 const marker = new mapboxgl.Marker({
     color: "#fda"
-}).setLngLat([5.851211, 46.542512])
+}).setLngLat([5.8512113, 46.5425118])
     .addTo(map)
 
 
 
-let c2 = new Coordinates(99.50, [5.851211, 46.542512], 103.90)
+let c2 = new Coordinates(99.5, [5.8512113,  46.5425118], 108.50 + 180)
 let CornerCoordinates = c2.calculateCoordinatesCorner(c2.altitude, c2.coordinates, c2.rotation)
 
 map.on('load', () => {
 
     map.addSource('radar1', {
         'type': 'image',
-        'url': 'https://i.ibb.co/Hr3w8D3/default.jpg',
+        'url': 'https://i.ibb.co/nBGJhSf/default.jpg',
         'coordinates': CornerCoordinates
 
 
