@@ -14,14 +14,20 @@
 <body>
     <div class="wrapper">
         <button id="fit">Ajouter un cadastre</button>
-        <img id="logo" src="../assets/logo5.png" alt="logo">
-        <button>Ajouter des photos</button>
+        <form action="http://localhost:3000/api" enctype="multipart/form-data" method="post">
+              <input id="files" type="file" name="upload" multiple>
+              <input id="party" type="datetime-local" name="date">
+              <input id="submit" type="submit" value="Envoyer les fichiers !" >            
+          </form>
+          <button id="fit2">Ajouter les photos</button> 
+    </div>
+    <div class="wave">
     </div>
     <div class="container">
         <div id="map"></div>
     </div>
-
 </body>
+
 <script type="text/javascript" src="./bundle.js"></script>
 
 </html>
