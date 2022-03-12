@@ -6,28 +6,29 @@ mapboxgl.accessToken = process.env.TOKEN_MAP
 
 const map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/mapbox/streets-v11',
+    style: 'mapbox://styles/mapbox/satellite-v9',
     center: [5.547961, 46.670920],
     zoom: 13,
-    
-
 })
+
+map.addControl(new mapboxgl.FullscreenControl())
 
 const marker = new mapboxgl.Marker({
     color: "#fda"
-}).setLngLat([5.8512113, 46.5425118])
+}).setLngLat([5.9721576, 46.8103346])
     .addTo(map)
 
 
 
-let c2 = new Coordinates(99.5, [5.8512113,  46.5425118], 108.50 + 180)
-let CornerCoordinates = c2.calculateCoordinatesCorner(c2.altitude, c2.coordinates, c2.rotation)
+document.getElementById('fit2').addEventListener('click', async () => {
 
-map.on('load', () => {
+
+    let c2 = new Coordinates(82.4, [5.9721576, 46.8103346], 80.3 + 180)
+    let CornerCoordinates = c2.calculateCoordinatesCorner(c2.altitude, c2.coordinates, c2.rotation)
 
     map.addSource('radar1', {
         'type': 'image',
-        'url': 'https://i.ibb.co/nBGJhSf/default.jpg',
+        'url': 'http://localhost:3000/image/1646995023510_DJI_0678.JPG',
         'coordinates': CornerCoordinates
 
 
@@ -38,13 +39,14 @@ map.on('load', () => {
         'source': 'radar1',
         'paint': {
             'raster-fade-duration': 0,
-            'raster-opacity': 0.5
+            'raster-opacity': 1
 
         }
 
     });
 
-});
+})
+
 
 document.getElementById('fit').addEventListener('click', async () => {
     let code = prompt('Quel est le nom de votre commune ?')
@@ -80,3 +82,4 @@ document.getElementById('fit').addEventListener('click', async () => {
         }
     });
 })
+

@@ -21,20 +21,20 @@ export default class Coordinates {
         // Caractéristique de la caméra du drone.
         const Ray = 6378137
         const Kilometers = (2 * Math.PI * Ray) / 360
-        const radius = 78
+        const radius = 65.47
 
         // Calcul en mètre terreste de la demi longueur et de la demi hauteur.
-        const distanceBetwenCenterLat = altitude * Math.tan((radius / 2) * Math.PI / 180) 
-        const distanceBetwenCenterLong = altitude * Math.tan((radius / 4) * Math.PI / 180)
+        const distanceBetwenCenterLong = altitude * Math.tan((radius / 2 ) * Math.PI / 180)
+        const distanceBetwenCenterLat = altitude * Math.tan((radius / (2 * (16/9))) * Math.PI / 180) 
 
         // Calcul des des coordonnées gps en degrés des 4 coints de l'image.
-        let latUp = coordinates[0] + (distanceBetwenCenterLat / (Kilometers * Math.cos(coordinates[0])))
+        let latUp = coordinates[0] + (distanceBetwenCenterLong / (Kilometers * Math.cos(coordinates[0])))
 
-        let latDown = coordinates[0] - (distanceBetwenCenterLat / (Kilometers * Math.cos(coordinates[0])))
+        let latDown = coordinates[0] - (distanceBetwenCenterLong / (Kilometers * Math.cos(coordinates[0])))
 
-        let longUp = coordinates[1] + (distanceBetwenCenterLong / Kilometers)
+        let longUp = coordinates[1] + (distanceBetwenCenterLat / Kilometers)
 
-        let longDown = coordinates[1] - (distanceBetwenCenterLong / Kilometers)
+        let longDown = coordinates[1] - (distanceBetwenCenterLat / Kilometers)
 
         let midCoordinates = [
             [latUp, longDown],
