@@ -38,7 +38,7 @@ pipeline {
                 parallel {
                     stage ('Test on firefox') {
                         steps{
-                            echo 'test on fireofx....'
+                            echo 'test on firefox....'
                         }
                     }
 
