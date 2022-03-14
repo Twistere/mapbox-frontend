@@ -35,7 +35,20 @@ pipeline {
 
         stage('Test') {
             steps {
-                echo 'Testing..'
+                parallel {
+                    stage ('Test on firefox') {
+                        steps{
+                            echo 'test on fireofx....'
+                        }
+                    }
+
+                    stage ('Test on chrome'){
+                        steps {
+                            echo 'test on chrome...'
+                        }
+                    }
+                }
+
             }
         }
 
