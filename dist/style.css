@@ -2,9 +2,12 @@ body { margin: 0; padding: 0; }
 
 .wrapper{
     display: grid;
-    grid-template-columns: 1fr 125px 1fr;
-    border-radius: 5%;
-    background-color: #e3f2fd;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-bottom: 5%;
+    margin-bottom: 10px;
+    background-image: url('../assets/wave.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
 }
 
 
@@ -20,6 +23,7 @@ body { margin: 0; padding: 0; }
     width: auto;
     height: auto;
     margin-top: 10px;
+
   }
 
   #logo{
@@ -29,16 +33,31 @@ body { margin: 0; padding: 0; }
     height: 125px;
   }
 
-  button{
-      height: 62.5px;
+  button, form{
+      height: 50px;
       margin-top: 30px;
       margin-left: 10px;
       margin-right: 10px;
+      margin-bottom: 30px;
       text-decoration: none;
       cursor: pointer;
       border: none;
       border-radius: 20px;
       background-color: #71797e;
-      
   
   }
+
+
+#files{
+  text-decoration: none;
+}
+
+.wave{
+
+
+  background-size: contain;
+  background-repeat: repeat;
+  display: block;
+
+
+}
