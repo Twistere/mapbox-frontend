@@ -28,7 +28,7 @@ document.getElementById('fit2').addEventListener('click', async () => {
 
     map.addSource('radar1', {
         'type': 'image',
-        'url': 'http://localhost:3000/image/1646995023510_DJI_0678.JPG',
+        'url': 'https://i.ibb.co/HYNzBDh/DJI-0678.jpgt',
         'coordinates': CornerCoordinates
 
 
