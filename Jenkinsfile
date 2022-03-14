@@ -30,6 +30,7 @@ pipeline {
             steps {
                 echo 'Building..'
                 sh 'npm i'
+                sh 'ls -la'
                 sh 'npx webpack'
             }
         }
