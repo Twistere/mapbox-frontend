@@ -34,7 +34,6 @@ pipeline {
         }
 
         stage('Test') {
-            steps {
                 parallel {
                     stage ('Test on firefox') {
                         steps{
@@ -47,8 +46,6 @@ pipeline {
                             echo 'test on chrome...'
                         }
                     }
-                }
-
             }
         }
 
