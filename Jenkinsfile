@@ -9,8 +9,8 @@ pipeline {
             steps {
                 echo 'Configure the project'
                 sh 'ls -la'
-               
-                sh 'cp /home/fedora/.credentials/.env /var/lib/jenkins/workspace/mapbox-frontend'
+                sh 'cp /home/fedora/.credentials/.env /var/lib/jenkins/workspace/mapbox-frontend_dev'
+                sh 'mv /var/lib/jenkins/workspace/mapbox-frontend_dev /var/lib/jenkins/workspace/mapbox-frontend'
                 
             }
         }
