@@ -54,7 +54,7 @@ pipeline {
                 echo 'Deploying....'
                 echo 'Delete the older version'
                 sh 'rm -rf /var/www/mapbox-frontend'
-                sh 'mv /var/lib/jenkins/workspace/mapbox-frontend /var/www' 
+                sh 'mv /var/lib/jenkins/workspace/mapbox-frontend_dev /var/www' 
             }
         }
     }
