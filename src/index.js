@@ -1,9 +1,11 @@
+import { header } from 'express/lib/request'
 import mapboxgl from 'mapbox-gl'
 import Coordinates from './coordinates'
 import getInseeCode from './map'
-
 mapboxgl.accessToken = process.env.TOKEN_MAP
 
+
+header("Access-Control-Allow-Origin: *")
 const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/satellite-v9',
