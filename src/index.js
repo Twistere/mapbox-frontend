@@ -1,7 +1,6 @@
 import mapboxgl from 'mapbox-gl'
 import Coordinates from './coordinates'
 import getInseeCode from './map'
-
 mapboxgl.accessToken = process.env.TOKEN_MAP
 
 const map = new mapboxgl.Map({
