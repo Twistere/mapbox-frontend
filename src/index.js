@@ -1,7 +1,6 @@
 import mapboxgl from 'mapbox-gl'
 import Coordinates from './coordinates'
 import getInseeCode from './map'
-import fetchJson from './map'
 
 mapboxgl.accessToken = process.env.TOKEN_MAP
 
@@ -13,11 +12,6 @@ const map = new mapboxgl.Map({
 })
 
 map.addControl(new mapboxgl.FullscreenControl())
-
-const marker = new mapboxgl.Marker({
-    color: "#fda"
-}).setLngLat([5.9721576, 46.8103346])
-    .addTo(map)
 
 
 const addImage = () => {
@@ -32,20 +26,12 @@ const addImage = () => {
                 for (let i = 0; i < json.length; i++) {
                     if (iso.toISOString() == json[i].date) {
                         for (let j = 0; j < json[i].cadastre[0].image.length; j++) {
-                            console.log(json[i].cadastre[0].image)
-                            console.log(json[i].cadastre[0].image[j].pathImg.slice(11)) // Slice permet d'extraire une partie d'une chaine de caractère 
-                            console.log(json[i].cadastre[0].image[j].gimballYawDegree)
-                            console.log(json[i].cadastre[0].image[j].gpsLatitude)
-                            console.log(json[i].cadastre[0].image[j].gpsLongitude)
-                            console.log(json[i].cadastre[0].image[j].absoluteAltitude)
-
 
                             if (j == 0) {
                                 console.log('prout')
                                 let c1 = new Coordinates(json[i].cadastre[0].image[j].absoluteAltitude, [json[i].cadastre[0].image[j].gpsLongitude, json[i].cadastre[0].image[j].gpsLatitude], json[i].cadastre[0].image[j].gimballYawDegree + 180)
                                 let CornerCoordinates1 = c1.calculateCoordinatesCorner(c1.altitude, c1.coordinates, c1.rotation)
                                 let url1 = `http://localhost:3000/api/images/${json[i].cadastre[0].image[j].pathImg.slice(11)}`
-                                console.log(CornerCoordinates1)
                                 map.addSource('radar1', {
                                     'type': 'image',
                                     'url': url1,
@@ -69,7 +55,6 @@ const addImage = () => {
                                 let c2 = new Coordinates(json[i].cadastre[0].image[j].absoluteAltitude, [json[i].cadastre[0].image[j].gpsLongitude, json[i].cadastre[0].image[j].gpsLatitude], json[i].cadastre[0].image[j].gimballYawDegree + 180)
                                 let CornerCoordinates2 = c2.calculateCoordinatesCorner(c2.altitude, c2.coordinates, c2.rotation)
                                 let url2 = `http://localhost:3000/api/images/${json[i].cadastre[0].image[j].pathImg.slice(11)}`
-                                console.log(CornerCoordinates2)
                                 map.addSource('radar2', {
                                     'type': 'image',
                                     'url': url2,
@@ -89,6 +74,30 @@ const addImage = () => {
                                 });
                             }
 
+
+                            if (j == 2) {
+                                let c3 = new Coordinates(json[i].cadastre[0].image[j].absoluteAltitude, [json[i].cadastre[0].image[j].gpsLongitude, json[i].cadastre[0].image[j].gpsLatitude], json[i].cadastre[0].image[j].gimballYawDegree + 180)
+                                let CornerCoordinates3 = c3.calculateCoordinatesCorner(c3.altitude, c3.coordinates, c3.rotation)
+                                let url3 = `http://localhost:3000/api/images/${json[i].cadastre[0].image[j].pathImg.slice(11)}`
+                                map.addSource('radar3', {
+                                    'type': 'image',
+                                    'url': url3,
+                                    'coordinates': CornerCoordinates3
+
+                                });
+                                map.addLayer({
+                                    id: 'radar-layer3',
+                                    'type': 'raster',
+                                    'source': 'radar3',
+                                    'paint': {
+                                        'raster-fade-duration': 0,
+                                        'raster-opacity': 1
+
+                                    }
+
+                                });
+                            }
+
                         }
                     }
 
@@ -99,7 +108,23 @@ const addImage = () => {
 
         });
 }
+
 addImage()
+
+map.on('dblclick', (e) => {
+
+    const marker = new mapboxgl.Marker({
+        color: "#fda",
+        draggable: true
+    }).setLngLat([e.lngLat.lng, e.lngLat.lat])
+        .addTo(map).setPopup( new mapboxgl.Popup({offset: 25})
+        .setHTML(
+            `<h3>Coordonnées de l'arbre</h3>
+            <p>longtitude : ${e.lngLat.lng}</p>
+            <p>lagitude : ${e.lngLat.lat}</p>`
+        ))
+})
+
 
 document.getElementById('fit').addEventListener('click', async () => {
     let code = prompt('Quel est le nom de votre commune ?')
