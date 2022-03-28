@@ -35,7 +35,7 @@ body {
 }
 
 button,
-form {
+form, #option{
   height: 50px;
   margin-top: 30px;
   margin-left: 10px;
@@ -57,3 +57,11 @@ form {
   background-repeat: repeat;
   display: block;
 }
+
+.mapboxgl-popup {
+  max-width: 200px;
+  }
+  .mapboxgl-popup-content {
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+  }

@@ -3,3 +3,4 @@ dist/bundle.js
 package-lock.json
 node_modules/
 assets/
+bundle.js.LICENSE.txt

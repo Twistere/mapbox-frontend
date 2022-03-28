@@ -1,49 +1,128 @@
 import mapboxgl from 'mapbox-gl'
 import Coordinates from './coordinates'
 import getInseeCode from './map'
+
 mapboxgl.accessToken = process.env.TOKEN_MAP
 
 const map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/mapbox/satellite-v9',
+    style: 'mapbox://styles/mapbox/streets-v11',
     center: [5.547961, 46.670920],
     zoom: 13,
 })
 
 map.addControl(new mapboxgl.FullscreenControl())
 
-const marker = new mapboxgl.Marker({
-    color: "#fda"
-}).setLngLat([5.9721576, 46.8103346])
-    .addTo(map)
+
+const addImage = () => {
+    fetch('http://localhost:3000/api/users')
+        .then(response => response.json())
+        .then(json => {
+            var elem = document.getElementById('dateUser')
+            elem.addEventListener('change', () => {
+                let date = elem.options[elem.selectedIndex].text
+                let iso = new Date(date);
+                console.log(iso.toISOString());
+                for (let i = 0; i < json.length; i++) {
+                    if (iso.toISOString() == json[i].date) {
+                        for (let j = 0; j < json[i].cadastre[0].image.length; j++) {
+
+                            if (j == 0) {
+                                console.log('prout')
+                                let c1 = new Coordinates(json[i].cadastre[0].image[j].absoluteAltitude, [json[i].cadastre[0].image[j].gpsLongitude, json[i].cadastre[0].image[j].gpsLatitude], json[i].cadastre[0].image[j].gimballYawDegree + 180)
+                                let CornerCoordinates1 = c1.calculateCoordinatesCorner(c1.altitude, c1.coordinates, c1.rotation)
+                                let url1 = `http://localhost:3000/api/images/${json[i].cadastre[0].image[j].pathImg.slice(11)}`
+                                map.addSource('radar1', {
+                                    'type': 'image',
+                                    'url': url1,
+                                    'coordinates': CornerCoordinates1
+
+                                });
+                                map.addLayer({
+                                    id: 'radar-layer1',
+                                    'type': 'raster',
+                                    'source': 'radar1',
+                                    'paint': {
+                                        'raster-fade-duration': 0,
+                                        'raster-opacity': 1
+
+                                    }
+
+                                });
+                            }
+
+                            if (j == 1) {
+                                let c2 = new Coordinates(json[i].cadastre[0].image[j].absoluteAltitude, [json[i].cadastre[0].image[j].gpsLongitude, json[i].cadastre[0].image[j].gpsLatitude], json[i].cadastre[0].image[j].gimballYawDegree + 180)
+                                let CornerCoordinates2 = c2.calculateCoordinatesCorner(c2.altitude, c2.coordinates, c2.rotation)
+                                let url2 = `http://localhost:3000/api/images/${json[i].cadastre[0].image[j].pathImg.slice(11)}`
+                                map.addSource('radar2', {
+                                    'type': 'image',
+                                    'url': url2,
+                                    'coordinates': CornerCoordinates2
+
+                                });
+                                map.addLayer({
+                                    id: 'radar-layer2',
+                                    'type': 'raster',
+                                    'source': 'radar2',
+                                    'paint': {
+                                        'raster-fade-duration': 0,
+                                        'raster-opacity': 1
+
+                                    }
+
+                                });
+                            }
 
 
+                            if (j == 2) {
+                                let c3 = new Coordinates(json[i].cadastre[0].image[j].absoluteAltitude, [json[i].cadastre[0].image[j].gpsLongitude, json[i].cadastre[0].image[j].gpsLatitude], json[i].cadastre[0].image[j].gimballYawDegree + 180)
+                                let CornerCoordinates3 = c3.calculateCoordinatesCorner(c3.altitude, c3.coordinates, c3.rotation)
+                                let url3 = `http://localhost:3000/api/images/${json[i].cadastre[0].image[j].pathImg.slice(11)}`
+                                map.addSource('radar3', {
+                                    'type': 'image',
+                                    'url': url3,
+                                    'coordinates': CornerCoordinates3
 
-document.getElementById('fit2').addEventListener('click', async () => {
+                                });
+                                map.addLayer({
+                                    id: 'radar-layer3',
+                                    'type': 'raster',
+                                    'source': 'radar3',
+                                    'paint': {
+                                        'raster-fade-duration': 0,
+                                        'raster-opacity': 1
+
+                                    }
+
+                                });
+                            }
+
+                        }
+                    }
 
 
-    let c2 = new Coordinates(82.4, [5.9721576, 46.8103346], 80.3 + 180)
-    let CornerCoordinates = c2.calculateCoordinatesCorner(c2.altitude, c2.coordinates, c2.rotation)
+                }
 
-    map.addSource('radar1', {
-        'type': 'image',
-        'url': 'https://i.ibb.co/HYNzBDh/DJI-0678.jpgt',
-        'coordinates': CornerCoordinates
+            })
 
+        });
+}
 
-    });
-    map.addLayer({
-        id: 'radar-layer1',
-        'type': 'raster',
-        'source': 'radar1',
-        'paint': {
-            'raster-fade-duration': 0,
-            'raster-opacity': 1
+addImage()
 
-        }
+map.on('dblclick', (e) => {
 
-    });
-
+    const marker = new mapboxgl.Marker({
+        color: "#fda",
+        draggable: true
+    }).setLngLat([e.lngLat.lng, e.lngLat.lat])
+        .addTo(map).setPopup( new mapboxgl.Popup({offset: 25})
+        .setHTML(
+            `<h3>Coordonnées de l'arbre</h3>
+            <p>longtitude : ${e.lngLat.lng}</p>
+            <p>lagitude : ${e.lngLat.lat}</p>`
+        ))
 })
 
 
