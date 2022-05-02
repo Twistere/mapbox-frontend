@@ -21,35 +21,35 @@ export default class Coordinates {
         // Caractéristique de la caméra du drone.
         const Ray = 6378137
         const Kilometers = (2 * Math.PI * Ray) / 360
-        const radius = 65.47
+        const Fov = 76.26974131
 
         // Calcul en mètre terreste de la demi longueur et de la demi hauteur.
-        const distanceBetwenCenterLong = altitude * Math.tan((radius / 2 ) * Math.PI / 180)
-        const distanceBetwenCenterLat = altitude * Math.tan((radius / (2 * (16/9))) * Math.PI / 180) 
+        const distanceBetwenCenterLong = altitude * Math.tan((Fov / 2 ) * Math.PI / 180)
+        const distanceBetwenCenterLat = altitude * Math.tan((Fov / 2) * (9/16) * Math.PI / 180)
 
         // Calcul des des coordonnées gps en degrés des 4 coints de l'image.
-        let latUp = coordinates[0] + (distanceBetwenCenterLong / (Kilometers * Math.cos(coordinates[0])))
+        let longRight = coordinates[0] + (distanceBetwenCenterLong / (Kilometers * Math.cos(coordinates[0])))
 
-        let latDown = coordinates[0] - (distanceBetwenCenterLong / (Kilometers * Math.cos(coordinates[0])))
+        let longLeft = coordinates[0] - (distanceBetwenCenterLong / (Kilometers * Math.cos(coordinates[0])))
 
-        let longUp = coordinates[1] + (distanceBetwenCenterLat / Kilometers)
+        let latUp = coordinates[1] + (distanceBetwenCenterLat / Kilometers)
 
-        let longDown = coordinates[1] - (distanceBetwenCenterLat / Kilometers)
+        let latDown = coordinates[1] - (distanceBetwenCenterLat / Kilometers)
 
         let midCoordinates = [
-            [latUp, longDown],
-            [latUp, longUp],
-            [latDown, longUp],
-            [latDown, longDown]
+            [longRight, latDown],
+            [longRight, latUp],
+            [longLeft, latUp],
+            [longLeft, latDown]
 
         ]
         console.log(midCoordinates)
 
         const bbox = [midCoordinates[0][0], midCoordinates[0][1], midCoordinates[2][0], midCoordinates[2][1]];
-        const bboxPolygon = turf.bboxPolygon(bbox)
-        const rotatedPolygon = turf.transformRotate(bboxPolygon, rotation)
+        const bboxPolygon = turf.bboxPolygon(bbox) // Encadre l'image dans une boite carré.
+        const rotatedPolygon = turf.transformRotate(bboxPolygon, rotation) // Rotation de la boite.
 
-        const rotatedCoords = (turf.getCoords(rotatedPolygon))[0].slice(0, 4);
+        const rotatedCoords = (turf.getCoords(rotatedPolygon))[0].slice(0, 4); // Récupère les 4 coordonnées.
 
         return rotatedCoords
 
