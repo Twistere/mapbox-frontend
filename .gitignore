@@ -4,3 +4,8 @@ package-lock.json
 node_modules/
 assets/
 bundle.js.LICENSE.txt
+.idea
+dist/120.*
+dist/856.*
+dist/820.*
+

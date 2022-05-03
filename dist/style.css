@@ -52,12 +52,6 @@ form, #option{
   text-decoration: none;
 }
 
-.wave {
-  background-size: contain;
-  background-repeat: repeat;
-  display: block;
-}
-
 .mapboxgl-popup {
   max-width: 200px;
   }

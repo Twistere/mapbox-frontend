@@ -9,7 +9,7 @@ pipeline {
             steps {
                 echo 'Configure the project'
                 sh 'ls -la'
-                sh 'cp /home/fedora/.credentials/.env /var/lib/jenkins/workspace/mapbox-frontend_dev'
+                sh 'cp /var/lib/jenkins/.credentials/.env /var/lib/jenkins/workspace/mapbox-frontend_dev'
             }
         }
 
@@ -33,6 +33,16 @@ pipeline {
             }
         }
 
+        stage('Deploy') {
+            steps {
+                echo 'Deploying....'
+                echo 'Delete the older version'
+                sh 'rm -rf /var/www/mapbox-frontend'
+                sh 'cp -R /var/lib/jenkins/workspace/mapbox-frontend_dev /var/www'
+                sh 'mv /var/www/mapbox-frontend_dev /var/www/mapbox-frontend' 
+            }
+        }
+
         stage('Test') {
                 parallel {
                     stage ('Test on firefox') {
@@ -46,16 +56,6 @@ pipeline {
                             echo 'test on chrome...'
                         }
                     }
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
-                echo 'Delete the older version'
-                sh 'rm -rf /var/www/mapbox-frontend'
-                sh 'cp -R /var/lib/jenkins/workspace/mapbox-frontend_dev /var/www'
-                sh 'mv /var/www/mapbox-frontend_dev /var/www/mapbox-frontend' 
             }
         }
     }
