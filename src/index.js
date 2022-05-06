@@ -20,72 +20,70 @@ const map = new mapboxgl.Map({
 map.addControl(new mapboxgl.FullscreenControl())
 
 
+
 const addImage = () => {
-    fetch('http://localhost:3000/api/users/')
-        .then(response => response.json())
-        .then(json => {
-            var elem = document.getElementById('dateUser')
-            elem.addEventListener('change', () => {
-                let date = elem.options[elem.selectedIndex].text
-                let iso = new Date(date);
-                console.log(json)
+
+    var elem = document.getElementById('dateUser');
+    elem.addEventListener('change', () => {
+        // On fait plus 1 pour commencer à l'index 1;
+        const idUser = document.getElementById('dateUser').selectedIndex + 1;
+
+        fetch(`http://localhost:3000/api/users/${idUser}`)
+            .then(response => response.json())
+            .then(json => {
+
                 let longMid = 0;
                 let latMid = 0;
 
                 const slider = document.getElementById('slider');
                 const sliderValue = document.getElementById('slider-value');
+                console.log('prout')
+                for (let j = 0; j < json.cadastre[0].image.length; j++) {
+                    console.log(json)
+                    let c = new Coordinates(json.cadastre[0].image[j].absoluteAltitude, [json.cadastre[0].image[j].gpsLongitude, json.cadastre[0].image[j].gpsLatitude], json.cadastre[0].image[j].gimballYawDegree + 180)
+                    let CornerCoordinates = c.calculateCoordinatesCorner(c.altitude, c.coordinates, c.rotation)
+                    longMid += (CornerCoordinates[0][0] + CornerCoordinates[2][0]) / 2
+                    latMid += (CornerCoordinates[0][1] + CornerCoordinates[2][1]) / 2
+                    let url = `http://localhost:3000/api/images/${json.cadastre[0].image[j].pathImg.slice(11)}`
+                    map.addSource(j.toString(), {
+                        'type': 'image',
+                        'url': url,
+                        'coordinates': CornerCoordinates
 
-                for (let i = 0; i < json.length; i++) {
-                    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
-                    if (iso.toISOString() == json[i].date) {
-                        for (let j = 0; j < json[i].cadastre[0].image.length; j++) {
-                            console.log(json[i])
-                            let c = new Coordinates(json[i].cadastre[0].image[j].absoluteAltitude, [json[i].cadastre[0].image[j].gpsLongitude, json[i].cadastre[0].image[j].gpsLatitude], json[i].cadastre[0].image[j].gimballYawDegree + 180)
-                            let CornerCoordinates = c.calculateCoordinatesCorner(c.altitude, c.coordinates, c.rotation)
+                    });
+                    map.addLayer({
+                        id: j.toString(),
+                        'type': 'raster',
+                        'source': j.toString(),
+                    });
 
-                            longMid += (CornerCoordinates[0][0] + CornerCoordinates[2][0]) / 2
-                            latMid += (CornerCoordinates[0][1] + CornerCoordinates[2][1]) / 2
-                            let url = `http://localhost:3000/api/images/${json[i].cadastre[0].image[j].pathImg.slice(11)}`
-                            map.addSource(j.toString(), {
-                                'type': 'image',
-                                'url': url,
-                                'coordinates': CornerCoordinates
+                    slider.addEventListener('input', (e) => {
+                        // Adjust the layers opacity. layer here is arbitrary - this could
+                        // be another layer name found in your style or a custom layer
+                        // added on the fly using `addSource`.
+                        map.setPaintProperty(
+                            j.toString(),
+                            'raster-opacity',
+                            parseInt(e.target.value, 10) / 100
+                        );
 
-                            });
-                            map.addLayer({
-                                id: j.toString(),
-                                'type': 'raster',
-                                'source': j.toString(),
-                            });
+                        // Value indicator
+                        sliderValue.textContent = e.target.value + '%';
+                    });
 
-                            slider.addEventListener('input', (e) => {
-                                // Adjust the layers opacity. layer here is arbitrary - this could
-                                // be another layer name found in your style or a custom layer
-                                // added on the fly using `addSource`.
-                                map.setPaintProperty(
-                                    j.toString(),
-                                    'raster-opacity',
-                                    parseInt(e.target.value, 10) / 100
-                                );
-
-                                // Value indicator
-                                sliderValue.textContent = e.target.value + '%';
-                            });
-
-                        }
-                    }
-
-                    latMid = latMid / json[i].cadastre[0].image.length;
-                    longMid = longMid / json[i].cadastre[0].image.length;
-                    console.log( longMid, latMid);
-                    map.flyTo({
-                        center: [longMid, latMid],
-                        zoom: 17
-                    })
                 }
+
+                latMid = latMid / json.cadastre[0].image.length;
+                longMid = longMid / json.cadastre[0].image.length;
+                console.log(longMid, latMid);
+                map.flyTo({
+                    center: [longMid, latMid],
+                    zoom: 17
+                })
+
             })
 
-        });
+    });
 }
 
 addImage()
