@@ -44,18 +44,10 @@ pipeline {
         }
 
         stage('Test') {
-                parallel {
-                    stage ('Test on firefox') {
-                        steps{
-                            echo 'test on firefox....'
-                        }
-                    }
-
-                    stage ('Test on chrome'){
-                        steps {
-                            echo 'test on chrome...'
-                        }
-                    }
+            stage ('Test on chrome'){
+                
+                 echo 'test on chrome...'
+                        
             }
         }
     }

@@ -28,7 +28,7 @@ const addImage = () => {
         // On fait plus 1 pour commencer à l'index 1;
         const idUser = document.getElementById('dateUser').selectedIndex + 1;
 
-        fetch(`http://localhost:8080/api/users/${idUser}`)
+        fetch(`http://vps-02643af6.vps.ovh.net:3000/api/users/${idUser}`)
             .then(response => response.json())
             .then(json => {
 
@@ -43,7 +43,7 @@ const addImage = () => {
                     let CornerCoordinates = c.calculateCoordinatesCorner(c.altitude, c.coordinates, c.rotation)
                     longMid += (CornerCoordinates[0][0] + CornerCoordinates[2][0]) / 2
                     latMid += (CornerCoordinates[0][1] + CornerCoordinates[2][1]) / 2
-                    let url = `http://localhost:8080/api/images/${json.cadastre[0].image[j].pathImg.slice(11)}`
+                    let url = `http://vps-02643af6.vps.ovh.net:3000/api/images/${json.cadastre[0].image[j].pathImg.slice(11)}`
                     map.addSource(j.toString(), {
                         'type': 'image',
                         'url': url,
