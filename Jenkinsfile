@@ -44,8 +44,7 @@ pipeline {
         }
 
         stage('Test') {
-            stage ('Test on chrome'){
-                
+            steps {
                  echo 'test on chrome...'
                         
             }
