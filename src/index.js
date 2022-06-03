@@ -28,7 +28,7 @@ const addImage = () => {
         // On fait plus 1 pour commencer à l'index 1;
         const idUser = document.getElementById('dateUser').selectedIndex + 1;
 
-        fetch(`http://localhost:3000/api/users/${idUser}`)
+        fetch(`http://localhost:8080/api/users/${idUser}`)
             .then(response => response.json())
             .then(json => {
 
@@ -37,14 +37,13 @@ const addImage = () => {
 
                 const slider = document.getElementById('slider');
                 const sliderValue = document.getElementById('slider-value');
-                console.log('prout')
                 for (let j = 0; j < json.cadastre[0].image.length; j++) {
                     console.log(json)
                     let c = new Coordinates(json.cadastre[0].image[j].absoluteAltitude, [json.cadastre[0].image[j].gpsLongitude, json.cadastre[0].image[j].gpsLatitude], json.cadastre[0].image[j].gimballYawDegree + 180)
                     let CornerCoordinates = c.calculateCoordinatesCorner(c.altitude, c.coordinates, c.rotation)
                     longMid += (CornerCoordinates[0][0] + CornerCoordinates[2][0]) / 2
                     latMid += (CornerCoordinates[0][1] + CornerCoordinates[2][1]) / 2
-                    let url = `http://localhost:3000/api/images/${json.cadastre[0].image[j].pathImg.slice(11)}`
+                    let url = `http://localhost:8080/api/images/${json.cadastre[0].image[j].pathImg.slice(11)}`
                     map.addSource(j.toString(), {
                         'type': 'image',
                         'url': url,
@@ -57,19 +56,6 @@ const addImage = () => {
                         'source': j.toString(),
                     });
 
-                    slider.addEventListener('input', (e) => {
-                        // Adjust the layers opacity. layer here is arbitrary - this could
-                        // be another layer name found in your style or a custom layer
-                        // added on the fly using `addSource`.
-                        map.setPaintProperty(
-                            j.toString(),
-                            'raster-opacity',
-                            parseInt(e.target.value, 10) / 100
-                        );
-
-                        // Value indicator
-                        sliderValue.textContent = e.target.value + '%';
-                    });
 
                 }
 
@@ -110,7 +96,7 @@ map.on('dblclick', (e) => {
         lat.innerHTML = `<p id="lat">Latitude : ${marker.getLngLat().lat}</p>`;
     })
 
-
+    console.log(e.lngLat);
 })
 
 
@@ -165,14 +151,15 @@ document.getElementById('pdf').addEventListener('click', async () => {
         doc.addImage(imgMarker, 'PNG', 30, 100, 2, 4);
         doc.setFontSize(7);
         let y = 102;
-        let markerClassLength = document.getElementsByClassName('mapboxgl-marker mapboxgl-marker-anchor-center').length;
-        for (let i = 0; i < markerClassLength; i++) {
+        let markerClass = document.getElementsByClassName('mapboxgl-marker mapboxgl-marker-anchor-center');
+
+
+        for (let i = 0; i < markerClass.length; i++) {
             doc.text(35, y, `Latitude : ${marker.getLngLat().lat}, Longitude : ${marker.getLngLat().lng}`);
             console.log(`Latitude : ${marker.getLngLat().lat}, Longitude : ${marker.getLngLat().lng}`);
             y = y + 5;
         }
         console.log(marker.getLngLat().length);
-
         doc.addImage(img, 'JPEG', 30, 40, 160, 50);
         doc.save('rapport_' + randomId + '.pdf');
 
