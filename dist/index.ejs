@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>ONF</title>
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css" rel="stylesheet">
+    <link rel="icon" href="http://localhost:3000/logo" />
     <link rel="stylesheet" href="http://localhost:3000/style" />
 
 </head>
@@ -14,25 +15,34 @@
 <body>
     <div class="wrapper">
         <button id="fit">Ajouter un cadastre</button>
-        <form action="http://localhost:3000/api/images" enctype="multipart/form-data" method="post">
+        <form action="http://localhost:3000/api/images" enctype="multipart/form-data" method="post" id="form-photo">
             <input id="files" type="file" name="upload" multiple>
             <input id="party" type="datetime-local" name="date">
             <input id="submit" type="submit" value="Envoyer les fichiers !">
         </form>
-        <div id="option" >
+        <div id="option">
             <select id="dateUser" class="test">
                 <% for (let i=0; i < user.length; i++) { %>
-                    <option value="date" >
-                        <%= user[i].date%>
+                    <option value="date" id="dateSelected">
+
+                        <%=user[i].date.toString().slice(0, 24)%>
                     </option>
+
                     <% } %>
             </select>
         </div>
+        <button id="pdf">Générer le PDF ! </button>
     </div>
+    <!-- <div class="map-overlay top">
+        <div class="map-overlay-inner">
+            <label>Layer opacity: <span id="slider-value">100%</span></label>
+            <input id="slider" type="range" min="0" max="100" step="0" value="100">
+        </div>
+    </div> -->
     <div class="container">
         <div id="map"></div>
     </div>
-    <button id="pdf">Générer le PDF ! </button>
+
 </body>
 
 <script type="text/javascript" src="http://localhost:3000/bundle"></script>

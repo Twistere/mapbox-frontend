@@ -2,6 +2,7 @@
     Le lien du stackoverflow pour comprendre le principe de fonctionnement ->
     https://stackoverflow.com/questions/43891269/rotated-points-in-mapbox-are-skewed
 */
+
 import * as turf from '@turf/turf'
 export default class Coordinates {
 
@@ -28,22 +29,21 @@ export default class Coordinates {
         const distanceBetwenCenterLat = altitude * Math.tan((Fov / 2) * (9/16) * Math.PI / 180)
 
         // Calcul des des coordonnées gps en degrés des 4 coints de l'image.
-        let longRight = coordinates[0] + (distanceBetwenCenterLong / (Kilometers * Math.cos(coordinates[0])))
+        let longUp = coordinates[0] + (distanceBetwenCenterLong / (Kilometers * Math.cos(coordinates[0])))
 
-        let longLeft = coordinates[0] - (distanceBetwenCenterLong / (Kilometers * Math.cos(coordinates[0])))
+        let longDown = coordinates[0] - (distanceBetwenCenterLong / (Kilometers * Math.cos(coordinates[0])))
 
-        let latUp = coordinates[1] + (distanceBetwenCenterLat / Kilometers)
+        let latRigth = coordinates[1] + (distanceBetwenCenterLat / Kilometers)
 
-        let latDown = coordinates[1] - (distanceBetwenCenterLat / Kilometers)
+        let latLeft = coordinates[1] - (distanceBetwenCenterLat / Kilometers)
 
         let midCoordinates = [
-            [longRight, latDown],
-            [longRight, latUp],
-            [longLeft, latUp],
-            [longLeft, latDown]
+            [longUp, latLeft],
+            [longUp, latRigth],
+            [longDown, latRigth],
+            [longDown, latLeft]
 
         ]
-        console.log(midCoordinates)
 
         const bbox = [midCoordinates[0][0], midCoordinates[0][1], midCoordinates[2][0], midCoordinates[2][1]];
         const bboxPolygon = turf.bboxPolygon(bbox) // Encadre l'image dans une boite carré.
